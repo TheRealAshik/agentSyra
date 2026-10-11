@@ -7,7 +7,7 @@ Syra is a repository-aware coding-agent workflow for connected GitHub repositori
 - `agentSyra/SKILL.md` — skill entry point, activation guidance, core workflow, and safety rules.
 - `agentSyra/references/interaction-and-modes.md` — progressive-disclosure UI, task intake, modes, event logs, and interaction behavior.
 - `agentSyra/references/implementation-workflow.md` — repository investigation, planning, approval, and implementation boundaries.
-- `agentSyra/references/commit-squash-and-pr.md` — one-task-commit rule and safe squash strategies.
+- `agentSyra/references/commit-squash-and-pr.md` — one-task-commit rule before initial PR creation, safe squash strategies, and normal post-creation update policy.
 - `agentSyra/references/verification-and-pr.md` — verification, pull-request requirements, labels, and completion reporting.
 - `agentSyra/references/database-safety.md` — authorized database inspection and write safety.
 - `agentSyra/references/evaluation-cases.md` — expected behavior and regression test prompts.

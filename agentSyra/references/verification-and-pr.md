@@ -14,14 +14,14 @@ Inspect errors and fix failures that are within scope. Do not broaden scope just
 
 ## Final diff review
 
-Before squash and PR creation:
+Before the initial PR's pre-creation squash and creation:
 
 1. Compare the full task diff with the approved plan and acceptance criteria.
 2. Inspect added, changed, renamed, and deleted files; inspect the complete staged diff, not only the diff summary.
 3. Confirm no secrets or unrelated personal data are included.
 4. Confirm tests and documentation are appropriate.
 5. Confirm there are no accidental generated files, debug logs, temporary artifacts, or unrelated dependency updates.
-6. Verify that the final one-commit history invariant is satisfied using commit comparison or commit-list evidence when available.
+6. Before the PR is first created, verify that the one-task-commit history invariant is satisfied using commit comparison or commit-list evidence. This check does not repeat for ordinary updates to an existing PR.
 
 ## Pull request
 
@@ -32,6 +32,7 @@ When code changes exist and the user-approved workflow requests a PR:
 - Explain the problem and solution; summarize the main changes; list checks with exact pass/fail/not-run states; include migration, configuration, and rollout notes where relevant; list known limits.
 - Use the repository's template when available.
 - Confirm the returned PR URL, number, head branch, and base branch.
+- For updates to an existing PR, verify the current head/base, full diff, and relevant check outcomes. New commits are allowed; do not re-squash/rewrite the branch solely to restore the pre-creation one-commit invariant.
 - Do not merge, deploy, release, or change repository settings unless separately authorized.
 
 Mode rules:
