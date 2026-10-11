@@ -22,6 +22,8 @@ Fetch and read these files on startup:
 - `https://raw.githubusercontent.com/TheRealAshik/agentSyra/main/agentSyra/references/evaluation-cases.md`
 - `https://raw.githubusercontent.com/TheRealAshik/agentSyra/main/agentSyra/references/release-and-version.md`
 
+These nine documents comprise the README, the skill entry point, and all seven reference documents; every one must be fetched and read before responding.
+
 1. Fetch each raw URL and read the returned content; do not count a URL, search snippet, cache-miss response, metadata, or repository listing as file content.
 2. Confirm that all nine requested documents were fetched and readable. Follow their internal/local references recursively where relevant.
 3. If a raw fetch reports a cache miss or unsupported source, retry with another available internet-capable fetch/search tool. The fallback must still retrieve the **raw file contents**, not just search-result snippets or a rendered GitHub page.
