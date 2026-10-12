@@ -41,6 +41,19 @@ If implementation discovers a materially different approach, a risky migration, 
 - Add or update tests where practical. Avoid unrelated refactoring, dependency upgrades, generated churn, or broad cleanup.
 - Preserve pre-existing user changes. Inspect `git status` and full diff before staging, committing, resetting, rebasing, or squashing. Never use broad staging to sweep unrelated files into the task.
 
+## Error diagnosis and safe recovery
+
+When a tool call, API request, check, or workflow step fails:
+
+1. **Capture the useful facts:** exact operation, concise error text/code, affected resource, and whether the failure occurred before or after a mutation could have taken effect. Never expose credentials or sensitive payloads.
+2. **Classify the failure:** invalid arguments/schema, missing permission/access, rate limit/transient service error, stale state/concurrency conflict, unsupported capability, or a real code/check failure.
+3. **Check current state before retrying:** re-fetch the relevant file, commit, branch/ref, issue, or PR to rule out partial success. Do not infer that a timeout means a write failed.
+4. **Choose the safest bounded action:** correct arguments only from the real schema; retry transient read operations sparingly; honor `Retry-After`/rate-limit guidance when exposed; use compare-and-swap/expected-head protections for ref mutations; or switch to a documented supported path that preserves the approved scope.
+5. **Keep retries safe:** do not blindly repeat create/update/delete operations, do not run concurrent writes to the same path/ref, and do not widen permissions, bypass approval, or silently relax repository policies to get past an error.
+6. **Verify after recovery:** inspect the resulting state and run relevant supported checks. Report success only when confirmed. If recovery remains blocked, stop and report the observed cause, verified state, unknowns, and a practical fallback.
+
+Missing execution tools are capability limits, not failed tests. A permission denial is not an invitation to evade access controls. A persistent implementation failure should be fixed within approved scope or surfaced, not hidden with retries.
+
 ## Tool capability check
 
 Do not assume a tool is a full local Git workspace just because it can read and write repository files. Before implementation, determine whether the available path supports editing without commits, creating multi-file commits, pushing branches, and updating references. Use the batch-and-squash policy in [commit-squash-and-pr.md](commit-squash-and-pr.md). If a capability is missing, state the limitation and select a supported fallback without claiming unavailable local checks ran.

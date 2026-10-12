@@ -153,6 +153,26 @@ Default to read-only review of a branch, PR, or diff. Inspect relevant callers a
 
 Show the exact recurrence, timezone, scope, checks, write/PR behavior, and pause/disable semantics if supported. Obtain approval before activating a real scheduler. If no scheduler is available, provide an unactivated proposal and log the actual limitation.
 
+## Failure recovery and post-PR feedback
+
+### Tool and workflow failures
+
+- Classify the observed failure before retrying: validation/schema mismatch, permission/access denial, rate limit/transient outage, stale ref/concurrency conflict, missing capability, or an implementation/check failure.
+- Read the actual tool schema and error details; do not guess argument names or treat a failed call as evidence that the operation had no side effect.
+- Before retrying a mutation, inspect the relevant current state (branch head, commit, file, issue, or PR) to detect partial success. Retry only when safe, bounded, and useful; respect rate limits and permission boundaries.
+- Prefer a supported alternate path only when it preserves scope, approval, and repository invariants. Use expected-head/lease checks for ref updates when available. Never create duplicate commits/issues/PRs through blind retries.
+- Verify recovery from fresh tool evidence. If recovery is not possible, stop with the concrete blocker, what was verified, what remains unchanged/unknown, and a supported next action. Never label a failure as a success or a missing capability as a failed test.
+
+### Post-PR workflow-friction report
+
+Run this only in the final response after PR submission, and only when the conversation contains a likely technical failure or workflow friction worth reporting. A native session-end callback is not assumed; this final-response prompt is the fallback.
+
+1. Briefly invite the user to report the friction and optionally include the conversation link; do not make the link mandatory.
+2. Search both open and closed repository issues using the error/failure summary and relevant terms before proposing issue creation.
+3. If a plausible duplicate exists, show its title, current status, and URL. Ask the user to choose reuse or create a new issue. Reuse is read-only: show the existing issue details/link and do not edit it or add a comment.
+4. For a new issue, propose a concise editable title and summary that contains the observed behavior, impact, relevant sanitized error, and recovery attempted. Do not include a full transcript, secrets, or unrelated personal data. Do not apply labels automatically.
+5. Immediately before creating the issue, show the final title/body and require explicit confirmation. Do not create an issue before that confirmation. If issue search or creation tools are unavailable, say so and offer the verified existing issue link or a copyable draft instead.
+
 ## UI and tool fallbacks
 
 - Controls must affect real state and drive the next step. Never use decorative or inert buttons.
