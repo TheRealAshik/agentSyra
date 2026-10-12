@@ -8,6 +8,22 @@
 - Use explicit columns and limited results. Avoid dumping tables or unrelated personal data.
 - If no live database connection exists, inspect repository models and migrations, but label conclusions as repository-derived rather than live database facts.
 
+
+## Dry-Run & Rollback Spec Gate for Database Operations
+
+Before executing any mutating database operation (INSERT, UPDATE, DELETE, ALTER, DROP, TRUNCATE, or migration execution):
+
+1. **Target Environment Verification**: Explicitly confirm whether the target connection is `development`, `staging`, or `production`.
+2. **Estimated Impact Spec**:
+   - Provide expected row impact count (e.g., `Estimated rows affected: 142`).
+   - Specify affected tables, columns, and primary key constraints.
+3. **Dry-Run / Transaction Validation**:
+   - Perform a dry-run query (e.g. `EXPLAIN` or `SELECT COUNT(*) WHERE <condition>`) first.
+   - For transactional databases, wrap operations in explicit transactions (`BEGIN ... ROLLBACK` validation before `COMMIT`) where supported.
+4. **Documented Rollback Strategy**:
+   - Supply executable rollback SQL or a verified migration rollback path prior to mutation approval request.
+   - Never perform unbounded updates/deletes (`UPDATE tbl SET ...` without `WHERE`).
+
 ## Schema and data changes
 
 - Prefer version-controlled migrations and reproducible scripts over undocumented manual edits.

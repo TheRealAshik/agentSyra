@@ -1,0 +1,68 @@
+name: Validate Syra Skill & References
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate Skill Frontmatter & File Structure
+        run: |
+          python -c "
+          import os, yaml
+
+          skill_path = 'agentSyra/SKILL.md'
+          assert os.path.exists(skill_path), 'agentSyra/SKILL.md missing!'
+
+          with open(skill_path, 'r') as f:
+              content = f.read()
+
+          parts = content.split('---')
+          assert len(parts) >= 3, 'Missing or malformed YAML frontmatter in SKILL.md'
+
+          meta = yaml.safe_load(parts[1])
+          assert 'name' in meta and meta['name'] == 'syra', 'Frontmatter missing name: syra'
+          assert 'metadata' in meta and 'version' in meta['metadata'], 'Frontmatter missing version!'
+
+          print(f'✅ SKILL.md validated successfully. Version: {meta[\"metadata\"][\"version\"]}')
+          "
+
+      - name: Validate Markdown Links & Reference Index
+        run: |
+          python -c "
+          import glob, re, os
+
+          broken = []
+          for filepath in glob.glob('agentSyra/**/*.md', recursive=True) + ['README.md', 'SYSTEM_INSTRUCTIONS.md']:
+              with open(filepath, 'r') as f:
+                  content = f.read()
+              links = re.findall(r'\]\(([^)]+)\)', content)
+              for link in links:
+                  if not link.startswith('http'):
+                      base_dir = os.path.dirname(filepath)
+                      target = os.path.join(base_dir, link)
+                      if not os.path.exists(target):
+                          broken.append((filepath, link, target))
+
+          if broken:
+              for src, link, tgt in broken:
+                  print(f'❌ Broken link in {src}: {link} -> {target}')
+              exit(1)
+
+          print('✅ All internal links verified successfully!')
+          "

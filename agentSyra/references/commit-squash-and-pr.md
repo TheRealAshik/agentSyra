@@ -6,6 +6,22 @@
 
 The default is still to avoid unnecessary intermediate commits before the first PR: accumulate related edits, verify them together, and create one task-level commit. Squashing is the final normalization step only when multiple Syra task commits exist before that initial PR is created. It is not a recurring requirement for later updates to an existing PR.
 
+
+## GitHub Multi-Tier Commit Resilience
+
+When performing repository updates across varying host environments, use the following multi-tiered fallback order:
+
+1. **Workspace Git (Local Working Tree)**: Accumulate edits -> Stage -> Single task commit -> Pre-PR branch validation.
+2. **GitHub Git Data API (Atomic Multi-File)**:
+   - Create blobs for all updated/new content.
+   - Build a single tree based on base commit SHA.
+   - Create a single commit.
+   - Perform compare-and-swap update on branch reference (`PATCH /repos/{owner}/{repo}/git/refs/{ref}`) with `expected_sha` validation.
+3. **Connector Per-File Contents API**:
+   - Apply file updates.
+   - Before PR creation, perform safe history squash of Syra-owned commits relative to base tip.
+   - Validate that branch head ref has not moved unexpectedly before rewriting history.
+
 ## Preferred order of approaches
 
 ### 1. Workspace-backed Git

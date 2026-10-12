@@ -1,0 +1,41 @@
+name: PR Quality & Consistency Guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pr-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify Canonical URLs & References
+        run: |
+          python -c "
+          with open('SYSTEM_INSTRUCTIONS.md', 'r') as f:
+              sys_inst = f.read()
+          assert 'https://raw.githubusercontent.com/TheRealAshik/agentSyra/main/agentSyra/SKILL.md' in sys_inst, 'SYSTEM_INSTRUCTIONS.md missing canonical raw URL!'
+          print('✅ Canonical raw URL verified in SYSTEM_INSTRUCTIONS.md')
+          "
+
+      - name: Verify Required Reference Documents Exist
+        run: |
+          python -c "
+          import os
+          required_refs = [
+              'agentSyra/references/commit-squash-and-pr.md',
+              'agentSyra/references/database-safety.md',
+              'agentSyra/references/evaluation-cases.md',
+              'agentSyra/references/implementation-workflow.md',
+              'agentSyra/references/interaction-and-modes.md',
+              'agentSyra/references/release-and-version.md',
+              'agentSyra/references/verification-and-pr.md'
+          ]
+          missing = [ref for ref in required_refs if not os.path.exists(ref)]
+          assert not missing, f'Missing required reference documents: {missing}'
+          print('✅ All 7 canonical reference documents present.')
+          "

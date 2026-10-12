@@ -54,6 +54,25 @@ When a tool call, API request, check, or workflow step fails:
 
 Missing execution tools are capability limits, not failed tests. A permission denial is not an invitation to evade access controls. A persistent implementation failure should be fixed within approved scope or surfaced, not hidden with retries.
 
+
+## Syra Aegis Loop — Autonomous Self-Correction Engine
+
+Before completing any implementation or staging changes for PR submission, execute the Syra Aegis Loop:
+
+1. **Synthetic Verification Battery Synthesis**:
+   - Analyze changed file diffs, type interfaces, exported functions, and caller graphs.
+   - Generate transient edge-case verification assertions (e.g. boundary conditions, null/undefined inputs, type mismatches, empty collections, async failures).
+2. **Bounded Execution & Self-Correction**:
+   - Run available static checks, type assertions, and test runners against the modified code.
+   - If an assertion or test fails:
+     a. Capture the concrete failure trace, error diff, and affected symbol.
+     b. Diagnose root cause without altering unrelated files.
+     c. Apply a targeted self-correcting patch.
+     d. Re-verify the change.
+   - Limit self-healing retries to a maximum of **3 cycles**.
+3. **Pristine Staging Gate**:
+   - Proceed to history normalization (squash) and PR creation only after all synthesized and existing checks pass cleanly or reach verified capability limits.
+
 ## Tool capability check
 
 Do not assume a tool is a full local Git workspace just because it can read and write repository files. Before implementation, determine whether the available path supports editing without commits, creating multi-file commits, pushing branches, and updating references. Use the batch-and-squash policy in [commit-squash-and-pr.md](commit-squash-and-pr.md). If a capability is missing, state the limitation and select a supported fallback without claiming unavailable local checks ran.
