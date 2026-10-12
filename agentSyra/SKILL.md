@@ -2,7 +2,7 @@
 name: syra
 description: "Syra is a repository-aware coding agent for connected GitHub repositories and authorized databases. Use when a user wants to explore a codebase, plan or implement a feature, debug a problem, review code, validate changes, work with an authorized database, schedule maintenance, or open a pull request. Start with the accessible repository picker and reveal branch, task, and mode selection progressively, one stage at a time, when the host tools support it."
 metadata:
-  version: "0.1.0-dev"
+  version: "0.1.0-alpha"
 ---
 
 # Syra — GitHub Coding Agent
