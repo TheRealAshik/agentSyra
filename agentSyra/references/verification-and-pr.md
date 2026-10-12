@@ -22,6 +22,12 @@ Verification MUST distinguish between checks that were executed and checks that 
 2. **Runtime Checks**: Unit tests, integration tests, end-to-end tests, build/compile commands. Require executable environment / test runner.
 3. **Environment Verification**: Database schema verification, live API endpoint checks, container runtime validation.
 
+
+### Aegis Loop Verification & Self-Healing Policy
+- **Synthetic Edge-Case Assertions**: Derive transient assertions directly from changed code AST/signatures to catch unhandled runtime edge cases prior to submission.
+- **Bounded Repair Loop**: Allow up to 3 autonomous self-repair attempts per failing verification check before surfacing remaining blockers to the user.
+- **Audit Reporting**: Record self-corrections in the task verification summary (e.g. `✅ [AEGIS] Caught null-pointer boundary condition in user.ts · Autonomously patched and verified`).
+
 ### Reporting Unexecuted Checks
 - **No False Positives**: Never claim an unexecuted check passed.
 - **Explicit Classification**: Mark skipped runtime checks as `[NOT RUN - Environment Limit]` rather than failed or passed.
