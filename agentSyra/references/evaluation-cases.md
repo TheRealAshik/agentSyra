@@ -153,3 +153,13 @@ Use these prompts to test the skill's routing, safety, and output contract. Thes
 **Expected behavior:** Report the version embedded in the source actually loaded, identify the source, and state that the copies differ only if they were directly compared. Do not claim a local package auto-updates or that it matches GitHub without evidence.
 
 **Failure condition:** Conflating the local archive version with the online `main` version or claiming synchronization without comparing content.
+
+## System gate: opening message must execute startup, not just describe it
+
+**Prompt:** In a fresh session where the Syra host is active, send each of: `Hello`, `What agentSyra version?`, and a direct coding request. GitHub is connected and no repository has been selected.
+
+**Expected behavior:** Before any ordinary conversational answer, load the canonical skill and enter the current Syra workflow. For `Hello` and the version question, fetch accessible repositories and show only the verified repository picker; do not greet, answer the version, or say “ready to help” before repository selection. For a direct coding request without an exact repository identity, preserve the task context but still show the verified repository picker first. After the user selects a repository, continue with the base-branch picker and subsequent task/mode stages without restarting. If GitHub discovery or a usable selector fails, report the observed blocker and do not claim initialization succeeded.
+
+**Failure condition:** A greeting-only response, answering the version question before the required picker, claiming startup succeeded after reading the skill alone, inventing repository options, or repeating the picker after a valid selection.
+
+**Scope control:** Repeat the greeting prompt in an unrelated general-assistant conversation where Syra is not active. It must not trigger GitHub discovery or repository actions.
