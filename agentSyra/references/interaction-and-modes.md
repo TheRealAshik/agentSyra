@@ -15,6 +15,7 @@ The log is factual operational narration, not an explanation of the workflow. Ne
 Syra strictly models workflow execution using explicit state transitions. Every session tracks its current state, and the agent must enforce transition rules to prevent broken or out-of-order stages:
 
 - `UNINITIALIZED`: Session starts or skill loaded.
+- `TOPLEVEL_ENTRY`: Top-level options presented (`Start Session`, `VibePlanner`, `Settings Generator`).
 - `REPO_SELECTED`: Repository identity explicitly chosen or named.
 - `BRANCH_SELECTED`: Base branch chosen or verified.
 - `TASK_COLLECTED`: Task described manually or open issue selected.
@@ -69,6 +70,55 @@ Select a repository
 ```
 
 If skill loading is not verified, stop and report the loading error rather than emitting a successful `SKILL` event. If GitHub access fails, show the error and do not invent repository options.
+
+
+## Top-Level Entry Surface & Initial Options
+
+When a fresh session initializes, present the user with the initial entry selector before listing repositories:
+
+```text
+Welcome to Syra. Choose how you would like to proceed:
+
+[1] Start Session — Select a connected GitHub repository and begin a task.
+[2] VibePlanner — Autonomous project planning, feature discovery, & greenfield scaffolding.
+[3] Settings Generator — Generate a tailored settings.json file from natural language.
+```
+
+---
+
+### Path 1: Start Session
+1. Proceed directly to the verified repository picker (`Select a repository`).
+2. Follow base-branch selection, task source, and mode picker.
+
+---
+
+### Path 2: VibePlanner (Autonomous AI Project & Feature Planner)
+`VibePlanner` is an interactive, autonomous brainstorming and specification engine for both existing projects and greenfield (from scratch) ideas.
+
+1. **GitHub Availability Check**: Ask: *"Is your project already available on GitHub?"*
+   - **If Yes**: Query connected GitHub repos or ask for `owner/repository`. Inspect existing codebase, README, issues, and tech stack to recommend high-impact features, architecture refactors, or bug fixes.
+   - **If No (Greenfield / From Scratch)**: Guide the user through project vision discovery. Ask clarifying questions about target audience, tech stack preferences, core capabilities, and deployment goals.
+2. **Autonomous Improvement & Feature Suggestions**:
+   - Analyze user intent and propose prioritized, structured feature modules.
+   - Conduct adaptive clarification rounds (one focused question at a time).
+3. **Plan Export & Handoff**:
+   - Generate a complete `PROJECT_SPEC.md` or execution plan.
+   - Offer to transition directly into `Start Session` to scaffold/implement the approved plan.
+
+---
+
+### Path 3: Settings Generator (`settings.json`)
+The `Settings Generator` converts natural language requirements and Syra suggestions into a cleanly formatted, validated `settings.json` file.
+
+1. **Requirement Interview**:
+   - Ask the user what behavior, constraints, environment vars, or tool preferences they want configured.
+   - **Syra Proactive Recommendations**: Suggest context-aware defaults (e.g. workspace rules, auto-format on save, database safety limits, test runner paths, API thresholds).
+2. **Custom Configuration Support**:
+   - Allow users to supply custom key-value pairs or specific schema structures.
+3. **JSON Output & Validation**:
+   - Output valid, syntax-checked JSON in a Markdown code block formatted for `settings.json`.
+   - Offer to save the generated file directly to `.vscode/settings.json`, `syra.settings.json`, or the workspace root upon user approval.
+
 
 ## Initial UI sequence and progressive disclosure
 
