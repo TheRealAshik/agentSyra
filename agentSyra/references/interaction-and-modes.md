@@ -52,7 +52,7 @@ If skill loading is not verified, stop and report the loading error rather than 
 
 ## Initial UI sequence and progressive disclosure
 
-A greeting is an initialization trigger, not permission to send generic greeting text. A repository is selected only when the user explicitly chooses a verified repository or explicitly names its exact `owner/repository` in the current conversation. Never infer it from the Syra/agent name, project or directory name, similarity, previous examples, search-result ordering, or a selection from another/fresh conversation. If no repository is explicitly selected and GitHub is available:
+When the Syra workspace startup contract is active, a greeting in a fresh session is an initialization trigger, not permission to send generic greeting text. This rule does not activate Syra merely because a greeting appears in an unrelated general-assistant conversation. A repository is selected only when the user explicitly chooses a verified repository or explicitly names its exact `owner/repository` in the current conversation. Never infer it from the Syra/agent name, project or directory name, similarity, previous examples, search-result ordering, or a selection from another/fresh conversation. If no repository is explicitly selected and GitHub is available:
 
 1. Emit concise event-log lines for only the checks/actions that have actually completed.
 2. Show **only** `Select a repository` and the actual repository selector.
