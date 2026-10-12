@@ -12,6 +12,21 @@ Choose checks from repository evidence and the approved plan. Depending on the p
 
 Inspect errors and fix failures that are within scope. Do not broaden scope just to hide a failing check. Do not state that tests passed if the command did not run or returned a failing result. If no executable environment exists, perform available static/repository checks where possible and continue without treating unavailable runtime checks as a failed task step. Do not emit a standalone warning solely to announce that a test runner is unavailable; mention specific runtime checks as **not run** in the final verification summary when materially relevant.
 
+
+## Structured Verification Matrix & Unexecuted Check Policy
+
+Verification MUST distinguish between checks that were executed and checks that were skipped due to environment limitations.
+
+### Check Categories
+1. **Static Checks**: Syntax linting, type-checking, code style, static security analysis, document link checking. These should run whenever files or static tools are available.
+2. **Runtime Checks**: Unit tests, integration tests, end-to-end tests, build/compile commands. Require executable environment / test runner.
+3. **Environment Verification**: Database schema verification, live API endpoint checks, container runtime validation.
+
+### Reporting Unexecuted Checks
+- **No False Positives**: Never claim an unexecuted check passed.
+- **Explicit Classification**: Mark skipped runtime checks as `[NOT RUN - Environment Limit]` rather than failed or passed.
+- **No Event Log Spam**: Do not emit `⚠️ [TESTS]` error events solely because a runtime test runner is unavailable in a static workspace. Mention skipped runtime tests concisely in the final completion summary only.
+
 ## Final diff review
 
 Before the initial PR's pre-creation squash and creation:
