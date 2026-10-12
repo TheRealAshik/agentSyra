@@ -4,7 +4,7 @@ Syra is a repository-aware coding-agent workflow for connected GitHub repositori
 
 ## Repository layout
 
-- `agentSyra/SKILL.md` — skill entry point, activation guidance, core workflow, and safety rules.
+- `agentSyra/SKILL.md` — canonical skill entry point, activation guidance, core workflow, safety rules, and the complete reference index.
 - `agentSyra/references/interaction-and-modes.md` — progressive-disclosure UI, task intake, modes, event logs, and interaction behavior.
 - `agentSyra/references/implementation-workflow.md` — repository investigation, planning, approval, and implementation boundaries.
 - `agentSyra/references/commit-squash-and-pr.md` — one-task-commit rule before initial PR creation, safe squash strategies, and normal post-creation update policy.
@@ -13,14 +13,11 @@ Syra is a repository-aware coding-agent workflow for connected GitHub repositori
 - `agentSyra/references/evaluation-cases.md` — expected behavior and regression test prompts.
 - `agentSyra/references/release-and-version.md` — embedded skill-version reporting, official GitHub release comparison, and changelog guidance.
 
-## System instruction options
+## System instruction
 
-Choose the file that matches the host environment:
+Use **[`SYSTEM_INSTRUCTIONS.md`](SYSTEM_INSTRUCTIONS.md)** as the sole default system instruction. It fetches and reads the canonical skill entry point from GitHub Raw. The system instruction deliberately does not duplicate individual reference URLs: `agentSyra/SKILL.md` owns the reference index and directs the agent to task-relevant guidance.
 
-- **[`SYSTEM_INSTRUCTIONS.md`](SYSTEM_INSTRUCTIONS.md)** — use when the Syra skill archive `syra-skill-package.zip` can be attached/read locally. It requires integrity checks and reading the complete packaged skill and reference set before responding.
-- **[`SYSTEM_INSTRUCTION_ONLINE.md`](SYSTEM_INSTRUCTION_ONLINE.md)** — use when the agent must load the current skill from GitHub over the internet. It uses raw-file URLs, not rendered GitHub pages, and requires the entry point plus README and all seven reference documents to be fetched and read.
-
-The canonical raw entry point used by the online variant is:
+Canonical raw entry point:
 [`agentSyra/SKILL.md`](https://raw.githubusercontent.com/TheRealAshik/agentSyra/main/agentSyra/SKILL.md)
 
 ## Install/use
@@ -31,12 +28,8 @@ The host must provide the GitHub, database, scheduling, and interactive UI tools
 
 ## Version and release notes
 
-The skill embeds a development/version identifier in `agentSyra/SKILL.md` frontmatter metadata. Agents should follow [`release-and-version.md`](agentSyra/references/release-and-version.md) to compare it with official GitHub Releases and report published notes. A development identifier is not itself an official release, and no release should be inferred from a commit or version string alone.
+The skill embeds a development/version identifier in `agentSyra/SKILL.md` frontmatter metadata. Agents should follow the reference index in `agentSyra/SKILL.md`, including `release-and-version.md`, to compare it with official GitHub Releases and report published notes. A development identifier is not itself an official release, and no release should be inferred from a commit or version string alone.
 
 ## Maintenance
 
-Keep both system-instruction files aligned in their operating rules. Their only intended difference is the startup source:
-- `SYSTEM_INSTRUCTIONS.md` loads the full local/attached ZIP package.
-- `SYSTEM_INSTRUCTION_ONLINE.md` fetches the full skill from GitHub Raw.
-
-When updating the skill or its references, update the system-instruction files if workflow behavior changes, and keep this README's paths and descriptions in sync with the repository.
+Maintain the reference index in `agentSyra/SKILL.md` when adding, removing, or renaming reference documents. Keep detailed workflow guidance in the relevant reference files. Do not duplicate the reference inventory in `SYSTEM_INSTRUCTIONS.md` or create a second system-instruction variant.

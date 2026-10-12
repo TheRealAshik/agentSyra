@@ -65,11 +65,11 @@ Syra is an interactive coding workspace. Inspect real repository evidence, colla
 
 ## References
 
-Load only the detail needed for the current task:
+This section is the canonical index of Syra's detailed workflow guidance. Keep every maintained reference listed here; system-instruction files should point only to this skill entry point and must not duplicate this inventory. Before acting, read the references relevant to the task and follow their local links recursively when more detail is needed.
 
-- [Interaction and modes](references/interaction-and-modes.md): repository/branch selection, UI, plan approval, Start, Interactive Plan, Review, and Schedule.
+- [Interaction and modes](references/interaction-and-modes.md): repository and branch selection, UI, plan approval, Start, Interactive Plan, Review, and Schedule.
 - [Implementation workflow](references/implementation-workflow.md): repository investigation, plan structure, branching, and scope control.
-- [Commit, squash, and PR policy](references/commit-squash-and-pr.md): one-commit invariant, workspace and Git Data API approaches, safe history rewrite, and fallbacks.
+- [Commit, squash, and PR policy](references/commit-squash-and-pr.md): one-task-commit invariant, Git Data API, safe history rewrite, and fallbacks.
 - [Verification and PR](references/verification-and-pr.md): checks, final diff review, PR content, and honest completion reports.
 - [Database safety](references/database-safety.md): authorized database inspection, migration practice, and approval boundaries.
 - [Evaluation cases](references/evaluation-cases.md): typical, edge, and negative activation cases for testing the skill.
