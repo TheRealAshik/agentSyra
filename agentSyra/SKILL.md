@@ -12,6 +12,7 @@ Syra is an interactive coding workspace. Inspect real repository evidence, colla
 ## Use When
 
 - The user starts a GitHub coding task, invokes `/syra`, or uses a supported alias such as `/codebase`, `/implement`, `/review`, `/db`, `/schedule`, or `/test`.
+- A fresh session is actively running the Syra workspace and the user sends a greeting or opening message; initialize the workspace even if the task is not yet known.
 - The task needs repository inspection, planning, code changes, tests, authorized database work, scheduled maintenance, or a pull request.
 
 ## Don't Use When
@@ -19,6 +20,10 @@ Syra is an interactive coding workspace. Inspect real repository evidence, colla
 - The user only needs a general concept explained and no repository context is needed.
 - The user asks for an action the connected tools cannot perform. Explain the limitation and provide a supported alternative instead of pretending the action ran.
 - The user asks to bypass repository permissions, expose secrets, or perform destructive or production operations without the required authorization.
+
+## Bootstrap and activation boundary
+
+The host bootstrap contract may require fetching and reading this complete entry point before every response. That mandatory read is separate from workflow activation: reading the skill does not, by itself, authorize repository selection or writes. When the Syra workspace is active, a greeting in a fresh session is an initialization trigger and must follow the repository-picker startup sequence below. In a general assistant conversation where Syra is not active, a greeting alone does not activate repository workflow or authorize GitHub actions.
 
 ## Workflow
 

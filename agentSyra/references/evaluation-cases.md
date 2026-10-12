@@ -2,9 +2,17 @@
 
 Use these prompts to test the skill's routing, safety, and output contract. These are test cases with expected behavior, not claims that a runtime test was executed.
 
+## Bootstrap gate: read the canonical skill before every response
+
+**Prompt:** Any user message, including a bare greeting, when the host system instruction requires the canonical skill to be loaded before responding.
+
+**Expected behavior:** Fetch and read the complete canonical `agentSyra/SKILL.md` from the configured raw GitHub URL before producing any response. If fetching or reading fails after supported retries, fail closed and report the observed blocker; do not use stale cached instructions. Treat this bootstrap requirement separately from workflow activation: reading the skill does not by itself authorize repository actions.
+
+**Failure condition:** Responding before the required skill was fetched and read, claiming it was loaded without evidence, or silently falling back to stale instructions.
+
 ## Startup: greeting with no repository selected
 
-**Prompt:** “hello” in a fresh session, with GitHub connected and no repository context.
+**Prompt:** “hello” in a fresh session where the Syra workspace startup contract is active, with GitHub connected and no repository context.
 
 **Expected behavior:** Emit concise structured event logs for actions actually verified (for example, skill files loaded, GitHub connection verified, repository list fetched), then show only the repository picker. Use lines such as `✅ [GITHUB] Connection verified` and `✅ [REPOSITORIES] Fetched 9 accessible repositories` only if the tool outputs support them. Do not add a generic greeting, “Syra is initialized” paragraph, workflow narration, next-step previews, branch picker, task prompt, or mode menu. After selection, emit verified branch-fetch logs and show only the branch picker.
 
